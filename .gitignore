@@ -1,0 +1,39 @@
+# === Compilats et Binaires ===
+*.o
+*.obj
+*.exe
+*.out
+*.app
+
+# Ignorer le dossier de sortie si vous compilez dans un dossier spécifique
+bin/
+build/
+out/
+
+# === Fichiers de Debug et Logs ===
+*.log
+*.dSYM/
+core
+*.stackdump
+
+# === IDEs et Éditeurs ===
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# CLion / JetBrains
+.idea/
+cmake-build-*/
+
+# Xcode
+*.xcodeproj/
+*.xcworkspace/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# === Fichiers de test / Données temporaires ===
+# Si vous générez des gros fichiers de graphes pour vos tests
