@@ -1,13 +1,8 @@
 #include "structures.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-// On passe le nom du fichier en argument pour respecter : ./metro metro.txt [cite: 55]
 Graph* charger_donnees(const char *nom_fichier) {
     FILE *file = fopen(nom_fichier, "r");
     if (!file) {
-        // Message d'erreur clair si le fichier est introuvable [cite: 62]
         fprintf(stderr, "Erreur : Impossible d'ouvrir le fichier %s\n", nom_fichier);
         return NULL;
     }
@@ -15,7 +10,7 @@ Graph* charger_donnees(const char *nom_fichier) {
     char ligne[256];
     int nb_stations = 0;
 
-    // Premier passage : déterminer le nombre de stations [cite: 56]
+    // 1. Premier passage : Compter les stations
     while (fgets(ligne, sizeof(ligne), file)) {
         if (strncmp(ligne, "STATION", 7) == 0) nb_stations++;
     }
@@ -26,22 +21,24 @@ Graph* charger_donnees(const char *nom_fichier) {
         return NULL;
     }
 
-    // Allocation du graphe et du tableau de stations [cite: 15, 57]
+    // 2. Allocation du Graphe
     Graph *g = malloc(sizeof(Graph));
     g->nb_stations = nb_stations;
     g->stations = malloc(sizeof(Station) * nb_stations);
 
-    // Initialisation par défaut 
+    // Initialisation par défaut pour éviter les pointeurs fous
     for(int i = 0; i < nb_stations; i++) {
-        g->stations[i].adj_list = NULL;
+        g->stations[i].id = -1;
         g->stations[i].name = NULL;
+        g->stations[i].degree = 0;
+        g->stations[i].adj_list = NULL;
     }
 
     rewind(file);
 
-    // Deuxième passage : remplissage et création des arcs [cite: 59, 60]
+    // 3. Deuxième passage : Remplissage
     while (fgets(ligne, sizeof(ligne), file)) {
-        // Ignorer proprement les lignes vides ou de commentaire [cite: 39, 40]
+        // Ignorer commentaires et lignes vides
         if (ligne[0] == '#' || ligne[0] == '\n' || ligne[0] == '\r' || ligne[0] == ' ') continue;
 
         int id1, id2;
@@ -51,35 +48,42 @@ Graph* charger_donnees(const char *nom_fichier) {
         if (sscanf(ligne, "STATION %d \"%[^\"]\"", &id1, nom_temp) == 2) {
             if (id1 >= 0 && id1 < nb_stations) {
                 g->stations[id1].id = id1;
-                g->stations[id1].name = strdup(nom_temp); // Initialise le nom 
+                g->stations[id1].name = strdup(nom_temp);
             }
         }
         // Lecture des EDGES (arêtes)
         else if (sscanf(ligne, "EDGE %d %d", &id1, &id2) == 2) {
-            // Vérification : stations inexistantes [cite: 42, 61]
+            // Sécurité : ID valides ?
             if (id1 < 0 || id1 >= nb_stations || id2 < 0 || id2 >= nb_stations) {
-                fprintf(stderr, "Erreur : Arête entre stations inexistantes (%d -> %d)\n", id1, id2);
+                fprintf(stderr, "Erreur : Arête invalide (%d -> %d)\n", id1, id2);
                 continue;
             }
 
-            // Vérification : doublons [cite: 43, 61]
+            // Vérification des doublons (parcours de la liste Node)
             int existe = 0;
-            Edge *curr = g->stations[id1].adj_list;
+            Node *curr = g->stations[id1].adj_list;
             while (curr) {
-                if (curr->target_id == id2) { existe = 1; break; }
+                if (curr->dest == id2) { 
+                    existe = 1; 
+                    break; 
+                }
                 curr = curr->next;
             }
 
             if (!existe) {
-                Edge *nouveau = malloc(sizeof(Edge));
-                nouveau->target_id = id2;
+                // Création d'un Node (on utilise tes structures)
+                Node *nouveau = malloc(sizeof(Node));
+                nouveau->dest = id2;
+                nouveau->weight = 1; // Poids par défaut (1 min entre stations)
                 nouveau->next = g->stations[id1].adj_list;
+                
+                // Mise à jour de la station
                 g->stations[id1].adj_list = nouveau;
+                g->stations[id1].degree++; // Indispensable pour ton tri par degré !
             }
         }
     }
 
     fclose(file);
-    //printf(" ===== MENU RESEAU DE TRANSPORT ===== \n 1 - Afficher les informations d'une station \n 2 - Lister les voisins d'une station \n 3 - Calculer un chemin minimal \n 4 - Afficher les stations triées par degré \n 0 - Quitter \n Votre choix :" );
     return g;
 }
