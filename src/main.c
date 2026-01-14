@@ -1,36 +1,22 @@
 #include "structures.h"
 #include "donnees.h"
+#include "menus.h"
 
 
-
-void menu(int* choix, int nb){
-    while(choix[0] != 0){
-        printf(">>>>>>>>>>>>>>> MENU MOBILITE MAP <<<<<<<<<<<<<<<\n");
-        printf("[        TAILLE DU RESEAU : %i STATIONS        ]\n", nb);
-        printf("1   -   Afficher les informations d'une station\n");
-        printf("2   -   Lister les voisins d'une station\n");
-        printf("3   -   Calculer un chemin minimal\n");
-        printf("4   -   Afficher les stations triées par degré\n");
-        printf("0   -   Quitter\n\n");
-        printf("Votre choix : ");
+int* choix = NULL ;
+int nb = 0;
+int id = -1 ;
+Graph* G = NULL ;
+char *name = NULL ;
 
 
-
-        if (scanf("%i", choix)!=1){
-            printf("\nERREUR LORS DE LA SAISIE DU CHOIX : VEUILLEZ ENTRER UN ENTIER ENTRE 0 ET 5\n") ;
-            // Nettoyage du tampon (évite une boucle infinie si l'utilisateur tape des lettres)
-            int c;
-            while ((c = getchar()) != '\n' && c != EOF); 
-            
-            choix[0] = -1; // On réinitialise pour ne pas quitter la boucle
-            continue;   // On réaffiche le menu
-        }
-        getchar();
-        printf("Vous avez entré : %d\n", choix[0]) ;
-    }
-}
 
 int main(int argc, char* argv[]){
+
+    choix = malloc(sizeof(int)) ; //Varibable qui va stocker le choix de l’utilisateur
+    name = malloc(50) ;
+
+    if (choix == NULL || name == NULL) return 1;
     if(argc != 2){
         printf("Erreur\nFORMAT ATTENDU : ./metro [fichierReseau]\n") ;
         return -1;
@@ -38,20 +24,48 @@ int main(int argc, char* argv[]){
     char* reseau = argv[1] ;
     printf("FICHIER CONTENANT LE RESEAU : %s.\n",reseau) ;
 
-    Graph *G = charger_donnees(reseau) ;
+    G = charger_donnees(reseau) ;
     if(G==NULL) {
         printf("ERREUR LORS DE LA CRÉATION DU GRAPHE\n"); 
         return -1;
     }
-    int nb = G->nb_stations ;
+    nb = G->nb_stations ;
 
-    int* choix = malloc(sizeof(int)) ; //Varibable qui va stocker le choix de l’utilisateur
     choix[0] = -1 ;
     //Affichage du menu
-    menu(choix, nb) ;
+    while(choix[0] != 0){
+        main_menu() ;
 
-
-
+        if(choix[0]==0){
+            continue;
+        }
+        if(choix[0]==1){
+            menu1();
+            choix[0]=-1;
+        }
+        else if(choix[0]==2){
+            menu2();
+            choix[0]=-1;
+            continue;
+        }
+        else if(choix[0]==3){
+            menu3();
+            choix[0]=-1;
+            continue;
+        }
+        else if(choix[0]==4){
+            menu4();
+            choix[0]=-1;
+            continue;
+        }
+        else{
+            printf("ERREUR DE SAISIE : ENTREZ UN NOMBRE ENTRE 0 ET 4\n");
+            continue;
+        }
+    }
+    
+    free(choix) ;
+    free(name);
     free_graph(G) ;
     return 0;
 }

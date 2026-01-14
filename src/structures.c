@@ -39,6 +39,49 @@ Graph* init_Graph(int nb){
 }
 
 
+//Affiche les informations d’une station
+int display_station(){
+    if (G == NULL) {
+        printf("ERREUR CRITIQUE : Le graphe n'est pas chargé en mémoire globale.\n");
+        return -1;
+    }
+    if(id==-1){
+        printf("ERREUR : ID invalide\n") ;
+        return -1;
+    }
+    for(int i = 0 ; i < nb ; i++ ){
+        if(G->stations[i].id==id){
+            printf(">>>>>>>>>>>>>> INFORMATION STATION <<<<<<<<<<<<<<\n");
+            printf("- ID      :   %d\n", G->stations[i].id) ;
+            printf("- NOM     :   %s\n", G->stations[i].name) ;
+            printf("- DEGRÉ   :   %d\n", G->stations[i].degree) ;
+        }
+    }
+    return 1;
+}
+
+//Détermine l’id par le nom
+int get_id_by_name() {
+    // On initialise l'id à -1 au cas où on ne trouve rien
+    id = -1;
+
+    for (int i = 0; i < nb; i++) {
+        // Sécurité : on vérifie que le nom de la station n'est pas NULL
+        if (G->stations[i].name != NULL) {
+            // strcmp renvoie 0 si les chaînes sont strictement identiques
+            if (strcmp(G->stations[i].name, name) == 0) {
+                id = i;
+                return id; // On a trouvé, on sort de la boucle
+            }
+        }
+    }
+
+    // Si on arrive ici, c'est que la boucle est finie sans succès
+    printf("\nERREUR : La station '%s' n'existe pas dans la base.\n", name);
+    return -1 ;
+}
+
+
 
 // Fonctions utilitaires pour libérer les blocs de mémoires alloués
 

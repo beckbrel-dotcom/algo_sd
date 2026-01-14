@@ -7,6 +7,8 @@
 #include <limits.h>
 #include <string.h>
 
+
+
 typedef struct Node {
     int dest;          // ID de la station de destination
     int weight;           // Temps de trajet (optionnel selon le fichier)
@@ -32,11 +34,25 @@ typedef struct Graph {
 } Graph;
 
 
+
+//Variables Globales 
+extern Graph* G;
+extern int id ;
+extern int nb ;
+extern char* name ;
+
+
 //Constructeurs de structures
 Node* init_Node(int v, int weight) ;
 void setup_station(Station *s, int id, const char *name) ;
 Graph* init_Graph(int nb) ;
 
+
+//Affiche les informations d’une station
+int display_station() ;
+
+//Détermine l’id par le nom
+int get_id_by_name() ;
 
 
 //Fonction de libération d'allocation de liste d'adjacence
