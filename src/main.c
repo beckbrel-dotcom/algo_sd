@@ -1,4 +1,4 @@
-#include "structures.h"
+
 #include "donnees.h"
 #include "menus.h"
 
@@ -14,7 +14,7 @@ char *name = NULL ;
 int main(int argc, char* argv[]){
 
     choix = malloc(sizeof(int)) ; //Varibable qui va stocker le choix de l’utilisateur
-    name = malloc(50) ;
+    name = malloc(40) ;
 
     if (choix == NULL || name == NULL) return 1;
     if(argc != 2){

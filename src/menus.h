@@ -1,7 +1,7 @@
 #ifndef MENUS_H
 #define MENU_H
 
-#include "structures.h"
+#include "tri.h"
 extern int* choix ;
 
 
@@ -9,9 +9,9 @@ extern int* choix ;
 void main_menu() ;
 
 void menu1() ;
-int menu2() ;
-int menu3() ;
-int menu4() ;
+void menu2() ;
+void menu3() ;
+void menu4() ;
 
 
 #endif

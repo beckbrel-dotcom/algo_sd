@@ -38,6 +38,24 @@ Graph* init_Graph(int nb){
     return new_Graph;
 }
 
+// Vérifie si une arête existe déjà entre deux index (Contrainte : doublons)
+int edge_exists(Graph* g, int src_idx, int dest_idx) {
+    Node* current = g->stations[src_idx].adj_list;
+    while (current != NULL) {
+        if (current->dest == dest_idx) return 1;
+        current = current->next;
+    }
+    return 0;
+}
+
+// Trouve l'index dans le tableau à partir de l'ID du fichier
+int trouver_index_par_id(Graph* g, int id_recherche) {
+    for (int i = 0; i < g->nb_stations; i++) {
+        if (g->stations[i].id == id_recherche) return i;
+    }
+    return -1;
+}
+
 
 //Affiche les informations d’une station
 int display_station(){
@@ -57,6 +75,58 @@ int display_station(){
             printf("- DEGRÉ   :   %d\n", G->stations[i].degree) ;
         }
     }
+    return 1;
+}
+
+int display_by_id(int num, int rg){ //Affichage par id (num) donné
+    if (G == NULL) {
+        printf("ERREUR CRITIQUE : Le graphe n'est pas chargé en mémoire globale.\n");
+        return -1;
+    }
+    if(num==-1){
+        printf("ERREUR : ID voisine invalide\n") ;
+        return -1;
+    }
+    for(int i = 0 ; i < nb ; i++ ){
+        if(G->stations[i].id==num){
+            printf("%i -  %-6d %-30s %d\n", rg, G->stations[i].id, G->stations[i].name, G->stations[i].degree);    
+        }
+    }
+    return 1;
+}
+
+int display_neighbors() {
+    if (G == NULL || id == -1) {
+        printf("ERREUR : Graphe non chargé ou ID invalide.\n");
+        return -1;
+    }
+
+    // On affiche la station sans attendre ici
+    display_station(); 
+    
+    printf("\n>>>>>>>>>>>>>> INFORMATIONS VOISINS <<<<<<<<<<<<<\n");
+    printf("     %-6s %-25s %s\n\n", "[ ID ]", "[ NOM ]", "[ DEGRÉ ]");
+
+    Node* voisin = G->stations[id].adj_list;
+    int count = 0;
+
+    if (voisin == NULL) {
+        printf("Cette station n'a aucune voisine.\n");
+    }
+
+    while (voisin != NULL) {
+        count++;
+        display_by_id(voisin->dest,count); 
+        
+        voisin = voisin->next;
+    }
+
+    printf("-------------------------------------------------------------\n");
+    printf("Fin de la liste (%d voisins trouvés).\n", count);
+    printf("(Appuyez sur Entrée pour revenir au menu)");
+    
+    // On vide le tampon et on attend une seule fois à la fin
+    getchar(); 
     return 1;
 }
 
@@ -108,75 +178,68 @@ void free_graph(Graph *g) {
 }
 
 
+void dijkstra(int start_node, int end_node) {
+    int n = G->nb_stations;
+    int dist[n];
+    int prev[n];
+    int visited[n];
 
-void dijkstra(Graph *g, int start_id) {
-    int n = g->nb_stations;
-    
-    // Tableaux de travail
-    int *dist = malloc(n * sizeof(int));
-    int *parent = malloc(n * sizeof(int));
-    int *visite = malloc(n * sizeof(int));
-
-    // 1. Initialisation
     for (int i = 0; i < n; i++) {
-        dist[i] = INT_MAX;  // Infini
-        parent[i] = -1;     // Aucun prédécesseur
-        visite[i] = 0;      // Non visité
+        dist[i] = INT_MAX;
+        prev[i] = -1;
+        visited[i] = 0;
     }
 
-    dist[start_id] = 0; // La distance vers le départ est nulle
-
-    
+    dist[start_node] = 0;
 
     for (int count = 0; count < n - 1; count++) {
-        // 2. Trouver la station non visitée avec la distance minimale
-        int min = INT_MAX;
-        int u = -1;
-
+        // Trouver la station avec la distance min non visitée
+        int min = INT_MAX, u = -1;
         for (int v = 0; v < n; v++) {
-            if (!visite[v] && dist[v] <= min) {
+            if (!visited[v] && dist[v] <= min) {
                 min = dist[v];
                 u = v;
             }
         }
 
-        // Si aucune station n'est atteignable, on s'arrête
-        if (u == -1 || dist[u] == INT_MAX) break;
+        if (u == -1 || u == end_node) break; // On a fini ou on est bloqué
 
-        // 3. Marquer la station u comme traitée
-        visite[u] = 1;
+        visited[u] = 1;
 
-        // 4. Relâcher les arêtes (Relaxation)
-        Node *neighbor = g->stations[u].adj_list;
-        while (neighbor != NULL) {
-            int v = neighbor->dest;
-            int weight = neighbor->weight;
-
-            // Vérification anti-overflow avant l'addition
-            if (!visite[v] && dist[u] + weight < dist[v]) {
-                dist[v] = dist[u] + weight;
-                parent[v] = u;
+        // Mise à jour des voisins
+        Node* curr = G->stations[u].adj_list;
+        while (curr != NULL) {
+            int v = curr->dest;
+            if (!visited[v] && dist[u] != INT_MAX && dist[u] + curr->weight < dist[v]) {
+                dist[v] = dist[u] + curr->weight;
+                prev[v] = u;
             }
-            neighbor = neighbor->next;
+            curr = curr->next;
         }
     }
 
-    // --- Exemple d'affichage des résultats ---
-    printf("Résultats depuis la station %s (ID: %d) :\n", g->stations[start_id].name, start_id);
-    for (int i = 0; i < n; i++) {
-        if (dist[i] == INT_MAX) {
-            printf("Station %d : Inaccessible\n", i);
-        } else {
-            printf("Station %d (%s) : %d min\n", i, g->stations[i].name, dist[i]);
+    // --- AFFICHAGE DU RÉSULTAT ---
+    if (dist[end_node] == INT_MAX) {
+        printf("Aucun chemin trouvé entre ces deux stations.\n");
+    } else {
+        printf("\nTemps total estimé : %d minutes\n", dist[end_node]);
+        printf("Itinéraire : ");
+        
+        // Reconstitution du chemin via une pile ou récursivité
+        int path[n];
+        int path_count = 0;
+        int curr = end_node;
+        while (curr != -1) {
+            path[path_count++] = curr;
+            curr = prev[curr];
         }
+        
+        for (int i = path_count - 1; i >= 0; i--) {
+            printf("%s%s", G->stations[path[i]].name, (i == 0 ? "" : " -> "));
+        }
+        printf("\n");
     }
-
-    // Libération des tableaux temporaires
-    free(dist);
-    free(parent);
-    free(visite);
 }
-
 
 
 // Fonction de comparaison pour qsort (ordre croissant)

@@ -48,8 +48,19 @@ void setup_station(Station *s, int id, const char *name) ;
 Graph* init_Graph(int nb) ;
 
 
+// Vérifie si une arête existe déjà entre deux index (Contrainte : doublons)
+int edge_exists(Graph* g, int src_idx, int dest_idx)  ;
+
+// Trouve l'index dans le tableau à partir de l'ID du fichier
+int trouver_index_par_id(Graph* g, int id_recherche)  ;
+
 //Affiche les informations d’une station
 int display_station() ;
+
+int display_by_id(int num, int rg) ;
+
+int display_neighbors();
+
 
 //Détermine l’id par le nom
 int get_id_by_name() ;
@@ -63,7 +74,7 @@ void free_adj_list(Node *head) ;
 void free_graph(Graph *g) ;
 
 //Algorithme de Dijkstra
-void dijkstra(Graph *g, int start_id) ;
+void dijkstra(int start_node, int end_node) ;
 
 
 
