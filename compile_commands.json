@@ -1,0 +1,87 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-g",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "obj/donnees.o",
+      "src/donnees.c"
+    ],
+    "directory": "/home/codeenlocks/1a_ir/sem5/algo/projet_weber/algo_sd",
+    "file": "/home/codeenlocks/1a_ir/sem5/algo/projet_weber/algo_sd/src/donnees.c",
+    "output": "/home/codeenlocks/1a_ir/sem5/algo/projet_weber/algo_sd/obj/donnees.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-g",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "obj/main.o",
+      "src/main.c"
+    ],
+    "directory": "/home/codeenlocks/1a_ir/sem5/algo/projet_weber/algo_sd",
+    "file": "/home/codeenlocks/1a_ir/sem5/algo/projet_weber/algo_sd/src/main.c",
+    "output": "/home/codeenlocks/1a_ir/sem5/algo/projet_weber/algo_sd/obj/main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-g",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "obj/menus.o",
+      "src/menus.c"
+    ],
+    "directory": "/home/codeenlocks/1a_ir/sem5/algo/projet_weber/algo_sd",
+    "file": "/home/codeenlocks/1a_ir/sem5/algo/projet_weber/algo_sd/src/menus.c",
+    "output": "/home/codeenlocks/1a_ir/sem5/algo/projet_weber/algo_sd/obj/menus.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-g",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "obj/structures.o",
+      "src/structures.c"
+    ],
+    "directory": "/home/codeenlocks/1a_ir/sem5/algo/projet_weber/algo_sd",
+    "file": "/home/codeenlocks/1a_ir/sem5/algo/projet_weber/algo_sd/src/structures.c",
+    "output": "/home/codeenlocks/1a_ir/sem5/algo/projet_weber/algo_sd/obj/structures.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-g",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "obj/tri.o",
+      "src/tri.c"
+    ],
+    "directory": "/home/codeenlocks/1a_ir/sem5/algo/projet_weber/algo_sd",
+    "file": "/home/codeenlocks/1a_ir/sem5/algo/projet_weber/algo_sd/src/tri.c",
+    "output": "/home/codeenlocks/1a_ir/sem5/algo/projet_weber/algo_sd/obj/tri.o"
+  }
+]

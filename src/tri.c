@@ -1,15 +1,17 @@
-#include "tri.h"
+#include "../include/tri.h"
 
 StatsTri tri_selection(Tuple* tab, int n) {
     StatsTri s = {0, 0};
     for (int i = 0; i < n - 1; i++) {
         int min_idx = i;
+        //Recher du minimum
         for (int j = i + 1; j < n; j++) {
             s.nb_comparaisons++;
             if (tab[j].degree > tab[min_idx].degree) { // Tri décroissant
                 min_idx = j;
             }
         }
+        //Échange si minimum trouvé
         if (min_idx != i) {
             Tuple temp = tab[i];
             tab[i] = tab[min_idx];

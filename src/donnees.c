@@ -1,4 +1,4 @@
-#include "donnees.h"
+#include "../include/donnees.h"
 
 
 // Nettoie la ligne : ignore les espaces au début et détecte les commentaires
@@ -50,7 +50,7 @@ Graph* charger_donnees(const char *nom_fichier) {
         char nom_temp[128];
         // On vérifie que sscanf lit bien un entier ET un nom
         if (sscanf(ptr, "STATION;%d;%[^\n\r]", &id_f, nom_temp) == 2) {
-            if (trouver_index_par_id(g, id_f) == -1) { // Pas de doublon d'ID
+            if (find_idx_by_id(g, id_f) == -1) { // Pas de doublon d'ID
                 g->stations[station_count].id = id_f;
                 g->stations[station_count].name = strdup(nom_temp);
                 station_count++;
@@ -71,8 +71,8 @@ Graph* charger_donnees(const char *nom_fichier) {
         if (res >= 2) {
             if (res == 2) temps = 1; // Temps par défaut si manquant (ex: EDGE;76;78;)
 
-            int idx1 = trouver_index_par_id(g, id_f1);
-            int idx2 = trouver_index_par_id(g, id_f2);
+            int idx1 = find_idx_by_id(g, id_f1);
+            int idx2 = find_idx_by_id(g, id_f2);
 
             // Vérification : Station référencée mais non définie
             if (idx1 == -1 || idx2 == -1) {

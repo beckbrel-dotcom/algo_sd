@@ -1,17 +1,18 @@
 
-#include "menus.h"
+#include "../include/menus.h"
 
 
 //Fonction d'affichage du menu principal
 void main_menu(){
 
-    printf(">>>>>>>>>>>>>>> MENU MOBILITE MAP <<<<<<<<<<<<<<<\n");
+    printf("\n>>>>>>>>>>>>>>> MENU MOBILITE MAP <<<<<<<<<<<<<<<\n");
     printf("[        TAILLE DU RESEAU : %i STATIONS        ]\n", nb);
     printf("1   -   Afficher les informations d'une station\n");
     printf("2   -   Lister les voisines d'une station\n");
     printf("3   -   Calculer un chemin minimal\n");
     printf("4   -   Afficher les stations triées par degré\n");
-    printf("0   -   QUITTER\n\n");
+    printf("0   -   QUITTER\n");
+    printf("-------------------------------------------------\n");
     printf("Votre choix : ");
 
 
@@ -36,7 +37,8 @@ void menu1() {
         printf("\n>>>>>>>>>>>>>>>>> MENU STATIONS <<<<<<<<<<<<<<<<\n");
         printf("1   -   Afficher par ID\n");
         printf("2   -   Afficher par NOM\n");
-        printf("0   -   RETOUR AU MENU PRINCIPAL\n\n");
+        printf("0   -   RETOUR AU MENU PRINCIPAL\n");
+        printf("------------------------------------------------\n");
         printf("Votre choix : ");
 
         if (scanf("%d", &sous_choix) != 1) {
@@ -57,14 +59,14 @@ void menu1() {
                 else printf("ERREUR : ID doit être compris entre 0 et %d.\n", nb-1);
             }
             getchar(); // Consomme le \n
-            printf("\n(Entrée pour continuer)"); getchar(); //Laisse le temps de lire les infos
+            printf("\n(Entrer pour continuer)"); getchar(); //Laisse le temps de lire les infos
         } 
         else if (sous_choix == 2) {
             printf("Entrez le NOM : ");
             scanf(" %[^\n]", name);
             get_id_by_name();
             if (id != -1) display_station();
-            printf("\n(Entrée pour continuer)"); getchar();
+            printf("\n(Entrer pour continuer)"); getchar();
         }
         else if (sous_choix < 0 || sous_choix > 2) {
             printf("\n[!] ERREUR : %d n'est pas une option valide (0, 1 ou 2).\n", sous_choix);
@@ -80,10 +82,11 @@ void menu2(){
     int sous_choix = -1; // Variable locale
     
     while (sous_choix != 0) {
-        printf("\n>>>>>>>>>>>>>>>>> INFORMATIONS VOISINS <<<<<<<<<<<<<<<<\n");
+        printf("\n>>>>>>>>>>>> INFORMATIONS VOISINS <<<<<<<<<<<<\n");
         printf("1   -   Selectionnez station par ID\n");
         printf("2   -   Selectionnez station par NOM\n");
-        printf("0   -   RETOUR AU MENU PRINCIPAL\n\n");
+        printf("0   -   RETOUR AU MENU PRINCIPAL\n");
+        printf("----------------------------------------------\n");
         printf("Votre choix : ");
 
         if (scanf("%d", &sous_choix) != 1) {
@@ -127,8 +130,8 @@ void menu3() {
     printf("ID Station d'arrivée : ");
     scanf("%d", &id_arr);
 
-    int idx_dep = trouver_index_par_id(G, id_dep);
-    int idx_arr = trouver_index_par_id(G, id_arr);
+    int idx_dep = find_idx_by_id(G, id_dep);
+    int idx_arr = find_idx_by_id(G, id_arr);
 
     if (idx_dep != -1 && idx_arr != -1) {
         dijkstra(idx_dep, idx_arr);
@@ -157,7 +160,7 @@ void menu4() {
         printf("3 - Tri RAPIDE (Itératif)\n");
         printf("3 - Tri RAPIDE (Récursif)\n");
         printf("0 - RETOUR AU MENU PRINCIPAL\n");
-        printf("--------------------------------------------------\n");
+        printf("-------------------------------------------------\n");
         printf("Votre choix : ");
 
         if (scanf("%d", &sous_choix) != 1) {
@@ -211,7 +214,7 @@ void menu4() {
                     i + 1, s_id, G->stations[s_id].name, tab[i].degree);
         }
 
-        printf("\nAppuyez sur Entrée pour continuer...");
+        printf("\nAppuyez sur Entrer pour continuer...");
         getchar(); getchar(); // Pause
     }
 

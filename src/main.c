@@ -1,6 +1,6 @@
 
-#include "donnees.h"
-#include "menus.h"
+#include "../include/donnees.h"
+#include "../include/menus.h"
 
 
 int* choix = NULL ;

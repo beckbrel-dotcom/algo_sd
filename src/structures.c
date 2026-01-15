@@ -1,21 +1,7 @@
 
-#include "structures.h"
+#include "../include/structures.h"
 
 //Défintions des constructeurs de strucutures
-
-Node* init_Node(int v, int weight) {
-    Node* newNode = (Node*)malloc(sizeof(Node));
-    if (newNode == NULL) {
-        perror("Erreur d'allocation pour le Node");
-        exit(EXIT_FAILURE);
-    }
-    newNode->dest = v;
-    newNode->weight = weight;
-    newNode->next = NULL; // Très important pour éviter les pointeurs fous
-    return newNode;
-}
-
-
 void setup_station(Station *s, int id, const char *name) {
     s->id = id;
     s->degree = 0;
@@ -38,7 +24,7 @@ Graph* init_Graph(int nb){
     return new_Graph;
 }
 
-// Vérifie si une arête existe déjà entre deux index (Contrainte : doublons)
+// Vérifie si une arête existe déjà de src_idx vers dest_idx(Contrainte : doublons)
 int edge_exists(Graph* g, int src_idx, int dest_idx) {
     Node* current = g->stations[src_idx].adj_list;
     while (current != NULL) {
@@ -49,7 +35,7 @@ int edge_exists(Graph* g, int src_idx, int dest_idx) {
 }
 
 // Trouve l'index dans le tableau à partir de l'ID du fichier
-int trouver_index_par_id(Graph* g, int id_recherche) {
+int find_idx_by_id(Graph* g, int id_recherche) {
     for (int i = 0; i < g->nb_stations; i++) {
         if (g->stations[i].id == id_recherche) return i;
     }
@@ -57,7 +43,7 @@ int trouver_index_par_id(Graph* g, int id_recherche) {
 }
 
 
-//Affiche les informations d’une station
+//Affiche les informations de la station identifiée par la variable id globale courrante 
 int display_station(){
     if (G == NULL) {
         printf("ERREUR CRITIQUE : Le graphe n'est pas chargé en mémoire globale.\n");
@@ -78,7 +64,7 @@ int display_station(){
     return 1;
 }
 
-int display_by_id(int num, int rg){ //Affichage par id (num) donné
+int display_by_id(int num, int rg){ //Affichage par id (num) donné, le rg-ième voisin
     if (G == NULL) {
         printf("ERREUR CRITIQUE : Le graphe n'est pas chargé en mémoire globale.\n");
         return -1;
@@ -95,6 +81,7 @@ int display_by_id(int num, int rg){ //Affichage par id (num) donné
     return 1;
 }
 
+//Affiche tous les voisins de la station identifiée par la variable id globale courrante 
 int display_neighbors() {
     if (G == NULL || id == -1) {
         printf("ERREUR : Graphe non chargé ou ID invalide.\n");
@@ -123,7 +110,7 @@ int display_neighbors() {
 
     printf("-------------------------------------------------------------\n");
     printf("Fin de la liste (%d voisins trouvés).\n", count);
-    printf("(Appuyez sur Entrée pour revenir au menu)");
+    printf("(Appuyez sur Entrer pour revenir au menu)");
     
     // On vide le tampon et on attend une seule fois à la fin
     getchar(); 
@@ -132,8 +119,8 @@ int display_neighbors() {
 
 //Détermine l’id par le nom
 int get_id_by_name() {
-    // On initialise l'id à -1 au cas où on ne trouve rien
-    id = -1;
+    
+    id = -1; // On initialise l'id à -1 au cas où on ne trouve rien
 
     for (int i = 0; i < nb; i++) {
         // Sécurité : on vérifie que le nom de la station n'est pas NULL
@@ -154,7 +141,6 @@ int get_id_by_name() {
 
 
 // Fonctions utilitaires pour libérer les blocs de mémoires alloués
-
 void free_adj_list(Node *head) {
     while (head != NULL) {
         Node *temp = head;
@@ -242,38 +228,4 @@ void dijkstra(int start_node, int end_node) {
 }
 
 
-// Fonction de comparaison pour qsort (ordre croissant)
-int comparerCroissant(const void *a, const void *b) {
-    Tuple *tupleA = (Tuple *)a;
-    Tuple *tupleB = (Tuple *)b;
-    
-    // Si A > B, renvoie un nombre positif -> A sera placé après B
-    return (tupleA->degree - tupleB->degree);
-}
 
-Tuple* obtenir_stations_triees(Graph *g) {
-    int n = g->nb_stations;
-    
-    // 1. Allouer le tableau de Tuples
-    Tuple *tableau = malloc(n * sizeof(Tuple));
-    if (tableau == NULL) return NULL;
-
-    // 2. Parcourir le graphe pour remplir le tableau
-    for (int i = 0; i < n; i++) {
-        tableau[i].id = g->stations[i].id;
-        
-        // Si tu n'as pas stocké le degré, on le compte ici
-        int d = 0;
-        Node *curr = g->stations[i].adj_list;
-        while (curr != NULL) {
-            d++;
-            curr = curr->next;
-        }
-        tableau[i].degree = d;
-    }
-
-    // 3. Trier le tableau par degré croissant
-    qsort(tableau, n, sizeof(Tuple), comparerCroissant);
-
-    return tableau;
-}

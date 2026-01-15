@@ -1,3 +1,20 @@
+/*
+@Auteurs : 
+    - OBIE OBOLO Becker
+    - NOUMBOGO IGOUWE Hermès
+
+@Description :
+    Document header pour la déclaration des fonctions de tri 
+    par ordre décroissant implémentées dans src/tri.c :
+        - Tri par sélection
+        - Tri par insertion
+        - Tri rapide (version récursive et itérative)
+
+@Implémenation :
+    13 janvier 2026
+*/
+
+
 #ifndef TRI_H
 #define TRI_H
 

@@ -1,3 +1,26 @@
+/*
+@Auteurs : 
+    - OBIE OBOLO Becker
+    - NOUMBOGO IGOUWE Hermès
+
+@Description :
+    Document header 
+    1. Pour la création des structures manipulées 
+    dans l’ensemble du projet :
+        -Node : structure de liste chaînée  
+        -Station : structure qui stocke les informations sur les stations
+        -Tuple : structure exigée par le cahier des charges facilitant le tri
+        des stattions suivant le degré
+
+    2. Pour l’implémentation des constructeurs de structure et de quelques
+    fonctions utilitaires à leurs manipulation dans src/structures.c :
+
+
+@Implémenation :
+    11 janvier 2026
+*/
+
+
 #ifndef STRUCTURES_H
 #define STRUCTURES_H
 
@@ -43,16 +66,15 @@ extern char* name ;
 
 
 //Constructeurs de structures
-Node* init_Node(int v, int weight) ;
 void setup_station(Station *s, int id, const char *name) ;
 Graph* init_Graph(int nb) ;
 
 
-// Vérifie si une arête existe déjà entre deux index (Contrainte : doublons)
+// Vérifie si une arête existe déjà de src_idx vers dest_idx (Contrainte : doublons)
 int edge_exists(Graph* g, int src_idx, int dest_idx)  ;
 
 // Trouve l'index dans le tableau à partir de l'ID du fichier
-int trouver_index_par_id(Graph* g, int id_recherche)  ;
+int find_idx_by_id(Graph* g, int id_recherche)  ;
 
 //Affiche les informations d’une station
 int display_station() ;
@@ -66,7 +88,7 @@ int display_neighbors();
 int get_id_by_name() ;
 
 
-//Fonction de libération d'allocation de liste d'adjacence
+//Fonction de libération d’allocation de liste d'adjacence
 void free_adj_list(Node *head) ;
 
 
@@ -77,11 +99,5 @@ void free_graph(Graph *g) ;
 void dijkstra(int start_node, int end_node) ;
 
 
-
-// Fonction de comparaison pour qsort (ordre croissant)
-int comparerCroissant(const void *a, const void *b) ;
-
-
-Tuple* obtenir_stations_triees(Graph *g) ;
 
 #endif

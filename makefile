@@ -3,11 +3,12 @@ TARGET = metro
 
 # Dossiers
 SRC_DIR = src
+INC_DIR = include
 OBJ_DIR = obj
 
 # Compilateur et options
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g -I$(SRC_DIR)
+CFLAGS = -Wall -Wextra -Werror -g -I$(INC_DIR)
 
 # Liste des sources (trouve tous les .c dans src/)
 SRC = $(wildcard $(SRC_DIR)/*.c)
